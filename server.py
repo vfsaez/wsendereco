@@ -1,8 +1,9 @@
 #!/usr/bin/python3
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from flask_restful import Resource, Api
 from sqlalchemy import create_engine
 from json import dumps
+from newend import EndForm
 
 db_connect = create_engine('sqlite:///enderecodb.db')
 app = Flask(__name__)
@@ -42,10 +43,20 @@ class Enderecos_Cep(Resource):
         return jsonify(result)
 
 
+@app.route('/end')
+def student():
+   return render_template('end.html')
+
+@app.route('/result',methods = ['POST', 'GET'])
+def result():
+   if request.method == 'POST':
+      result = request.form
+      return render_template("result.html",result = result)
+
 api.add_resource(Enderecos_Cep, '/enderecos/cep/<cep>') # Route_3
 api.add_resource(Enderecos_Id, '/enderecos/id/<id>') # Route_3
 api.add_resource(Enderecos, '/enderecos') # Route_1
 
 
 if __name__ == '__main__':
-     app.run()
+     app.run(port='80')

@@ -8,6 +8,7 @@ Flask==0.12
 Flask-Jsonpify==1.5.0
 Flask-RESTful==0.3.5
 Flask-SQLAlchemy==2.1
+Flask-WTF==0.14.2
 hyperlink==18.0.0
 idna==2.7
 incremental==17.5.0
@@ -24,4 +25,5 @@ SQLAlchemy==1.1.5
 Twisted==18.7.0
 virtualenv==16.0.0
 Werkzeug==0.11.15
+WTForms==2.2.1
 zope.interface==4.5.0
