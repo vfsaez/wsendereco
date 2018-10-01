@@ -25,7 +25,7 @@ class Enderecos(Resource):
         inicio = request.json['inicio']
         fim = request.json['fim']
 
-        query = conn.execute("insert into employees values(null,'{0}','{1}','{2}','{3}')".format(cep, logradouro, inicio, fim))
+        query = conn.execute("insert into endereco values(null,'{0}','{1}','{2}','{3}')".format(cep, logradouro, inicio, fim))
         return {'status':'success'}
 
 class Enderecos_Id(Resource):
@@ -33,6 +33,19 @@ class Enderecos_Id(Resource):
         conn = db_connect.connect()
         query = conn.execute("select * from endereco where id ="+id)
         result = {'Endereco': [dict(zip(tuple (query.keys()) ,i)) for i in query.cursor]}
+        return jsonify(result)
+
+class Enderecos_Logradouro(Resource):
+    def get(self, logradouro):
+        conn = db_connect.connect()
+        consult = "select * from endereco where "
+        for index, item in enumerate(logradouro.split('+')):
+            if index == 0:
+                consult +=  "logradouro like '%"+item+"%'"
+            else:
+                consult +=  " and logradouro like '%"+item+"%'"
+        query = conn.execute(consult)
+        result = {'Enderecos Compativeis': [dict(zip(tuple (query.keys()) ,i)) for i in query.cursor]}
         return jsonify(result)
 
 class Enderecos_Cep(Resource):
@@ -53,9 +66,10 @@ def result():
       result = request.form
       return render_template("result.html",result = result)
 
-api.add_resource(Enderecos_Cep, '/enderecos/cep/<cep>') # Route_3
-api.add_resource(Enderecos_Id, '/enderecos/id/<id>') # Route_3
-api.add_resource(Enderecos, '/enderecos') # Route_1
+api.add_resource(Enderecos_Cep, '/api/enderecos/cep/<cep>') # Route_3
+api.add_resource(Enderecos_Id, '/api/enderecos/id/<id>') # Route_3
+api.add_resource(Enderecos_Logradouro, '/api/enderecos/logradouro/<logradouro>') # Route_3
+api.add_resource(Enderecos, '/api/enderecos') # Route_1
 
 
 if __name__ == '__main__':
