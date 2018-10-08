@@ -14,9 +14,6 @@ tokenDictionary = {}
 
 class Enderecos(Resource):
     def get(self):
-        if not Authenticate_Login.validateRequest(self, request):
-            return False
-
         conn = db_connect.connect() # connect to database
         query = conn.execute("select * from endereco") # This line performs query and returns json result
         return {'Ceps cadastrados': [i[1] for i in query.cursor.fetchall()]} # Fetches first column that is Employee ID
@@ -77,7 +74,7 @@ class Authenticate_Login(Resource):
         if (username is None or password is None):
             return False
 
-        # validate username and password
+        # TODO: validate username and password
         token = self.generateToken()
         tokenDictionary[token] = username
         result = {'TOKEN': token}
