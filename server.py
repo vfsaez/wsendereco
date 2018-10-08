@@ -77,7 +77,7 @@ class Authenticate_Login(Resource):
         if (username is None or password is None):
             return False
 
-        # validate username and password
+        # TODO: validate username and password
         token = self.generateToken()
         tokenDictionary[token] = username
         result = {'TOKEN': token}
