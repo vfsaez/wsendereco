@@ -1,22 +1,30 @@
 #!/usr/bin/python3
+from os import system
+
 from flask import Flask, request, jsonify, render_template
 from flask_restful import Resource, Api
 from sqlalchemy import create_engine
-from json import dumps
-from newend import EndForm
+from secrets import *
 
 db_connect = create_engine('sqlite:///enderecodb.db')
 app = Flask(__name__)
 api = Api(app)
 
+tokenDictionary = {}
 
 class Enderecos(Resource):
     def get(self):
+        if not Authenticate_Login.validateRequest(self, request):
+            return False
+
         conn = db_connect.connect() # connect to database
         query = conn.execute("select * from endereco") # This line performs query and returns json result
         return {'Ceps cadastrados': [i[1] for i in query.cursor.fetchall()]} # Fetches first column that is Employee ID
     
     def post(self):
+        if not Authenticate_Login.validateRequest(self, request):
+            return False
+
         conn = db_connect.connect()
         print(request.json)
         id = request.json['id']
@@ -30,6 +38,9 @@ class Enderecos(Resource):
 
 class Enderecos_Id(Resource):
     def get(self, id):
+        if not Authenticate_Login.validateRequest(self, request):
+            return False
+
         conn = db_connect.connect()
         query = conn.execute("select * from endereco where id ="+id)
         result = {'Endereco': [dict(zip(tuple (query.keys()) ,i)) for i in query.cursor]}
@@ -37,6 +48,9 @@ class Enderecos_Id(Resource):
 
 class Enderecos_Logradouro(Resource):
     def get(self, logradouro):
+        if not Authenticate_Login.validateRequest(self, request):
+            return False
+
         conn = db_connect.connect()
         consult = "select * from endereco where "
         for index, item in enumerate(logradouro.split('+')):
@@ -50,10 +64,40 @@ class Enderecos_Logradouro(Resource):
 
 class Enderecos_Cep(Resource):
     def get(self, cep):
+        if not Authenticate_Login.validateRequest(self, request):
+            return False
+
         conn = db_connect.connect()
         query = conn.execute("select * from endereco where cep ="+cep)
         result = {'Endereco': [dict(zip(tuple (query.keys()) ,i)) for i in query.cursor]}
         return jsonify(result)
+
+class Authenticate_Login(Resource):
+    def post(self, username, password):
+        if (username is None or password is None):
+            return False
+
+        # validate username and password
+        token = self.generateToken()
+        tokenDictionary[token] = username
+        result = {'TOKEN': token}
+        return jsonify(result)
+
+    def generateToken(self):
+        return token_hex(16)
+
+    def validateRequest(self, request):
+        if request.headers.get('TOKEN') is None:
+            return False
+
+        return request.headers.get('TOKEN') in tokenDictionary
+
+class Authenticate_Logout(Resource):
+    def post(self, username):
+        for key, value in dict(tokenDictionary).items():
+            if value == username:
+                del tokenDictionary[key]
+        return True
 
 
 @app.route('/end')
@@ -70,6 +114,8 @@ api.add_resource(Enderecos_Cep, '/api/enderecos/cep/<cep>') # Route_3
 api.add_resource(Enderecos_Id, '/api/enderecos/id/<id>') # Route_3
 api.add_resource(Enderecos_Logradouro, '/api/enderecos/logradouro/<logradouro>') # Route_3
 api.add_resource(Enderecos, '/api/enderecos') # Route_1
+api.add_resource(Authenticate_Login, '/api/login/<username>/<password>')
+api.add_resource(Authenticate_Logout, '/api/logout/<username>')
 
 
 if __name__ == '__main__':
