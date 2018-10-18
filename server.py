@@ -14,16 +14,11 @@ tokenDictionary = {}
 
 class Enderecos(Resource):
     def get(self):
-        if not Authenticate_Login.validateRequest(self, request):
-            return False
-
         conn = db_connect.connect() # connect to database
         query = conn.execute("select * from endereco") # This line performs query and returns json result
         return {'Ceps cadastrados': [i[1] for i in query.cursor.fetchall()]} # Fetches first column that is Employee ID
     
     def post(self):
-        if not Authenticate_Login.validateRequest(self, request):
-            return False
 
         conn = db_connect.connect()
         print(request.json)
@@ -38,8 +33,6 @@ class Enderecos(Resource):
 
 class Enderecos_Id(Resource):
     def get(self, id):
-        if not Authenticate_Login.validateRequest(self, request):
-            return False
 
         conn = db_connect.connect()
         query = conn.execute("select * from endereco where id ="+id)
@@ -48,8 +41,6 @@ class Enderecos_Id(Resource):
 
 class Enderecos_Logradouro(Resource):
     def get(self, logradouro):
-        if not Authenticate_Login.validateRequest(self, request):
-            return False
 
         conn = db_connect.connect()
         consult = "select * from endereco where "
@@ -64,8 +55,6 @@ class Enderecos_Logradouro(Resource):
 
 class Enderecos_Cep(Resource):
     def get(self, cep):
-        if not Authenticate_Login.validateRequest(self, request):
-            return False
 
         conn = db_connect.connect()
         query = conn.execute("select * from endereco where cep ="+cep)
