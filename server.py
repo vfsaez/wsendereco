@@ -57,7 +57,7 @@ class Enderecos_Cep(Resource):
     def get(self, cep):
 
         conn = db_connect.connect()
-        query = conn.execute("select * from endereco where cep ='"+cep"'")
+        query = conn.execute("select * from endereco where cep ='"+cep+"'")
         result = {'Endereco': [dict(zip(tuple (query.keys()) ,i)) for i in query.cursor]}
         return jsonify(result)
 
