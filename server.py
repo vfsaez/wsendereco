@@ -31,6 +31,59 @@ class Enderecos(Resource):
         query = conn.execute("insert into endereco values(null,'{0}','{1}','{2}','{3}')".format(cep, logradouro, inicio, fim))
         return {'status':'success'}
 
+class Pedidos_id(Resource):
+    def get(self, id):
+        conn = db_connect.connect() # connect to database
+        query = conn.execute("select * from pedido where idCliente = "+id) # This line performs query and returns json result
+        return jsonify([dict(zip(tuple (query.keys()) ,i)) for i in query.cursor])
+
+
+
+class Pedidos(Resource):
+    def post(self):
+
+        conn = db_connect.connect()
+        print(request.json)
+        idCliente = request.json['idCliente']
+        cpfCliente = request.json['cpfCliente']
+        nomeCliente = request.json['nomeCliente']
+        logradouroEntrega = request.json['logradouroEntrega']
+        numeroEntrega = request.json['numeroEntrega']
+        complementoEntrega = request.json['complementoEntrega']
+        cepEntrega = request.json['cepEntrega']
+        valorProdutos = request.json['valorProdutos']
+        FreteTotal = request.json['FreteTotal']
+        valorTotal = request.json['valorTotal']
+        prazoEntrega = request.json['prazoEntrega']
+        idPagamento = request.json['idPagamento']
+        formaPagamento = request.json['formaPagamento']
+        statusPagamento = request.json['statusPagamento']
+        statusEntrega = request.json['statusEntrega']
+        statusPedido = request.json['statusPedido']
+        query = conn.execute("insert into pedido values(null,'{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{12}','{13}','{14}','{15}')".format(idCliente,cpfCliente,nomeCliente,logradouroEntrega,numeroEntrega,complementoEntrega,cepEntrega,valorProdutos,FreteTotal,valorTotal,prazoEntrega,idPagamento,formaPagamento,statusPagamento,statusEntrega,statusPedido))
+        return {'status':'success'}
+
+
+class ProdutosPedido_id(Resource):
+    def get(self, id):
+        conn = db_connect.connect() # connect to database
+        query = conn.execute("select * from produtosPedido where idPedido = "+id) # This line performs query and returns json result
+        return jsonify([dict(zip(tuple (query.keys()) ,i)) for i in query.cursor])
+
+class ProdutosPedido(Resource):
+    def post(self):
+
+        conn = db_connect.connect()
+        print(request.json)
+        idPedido = request.json['idPedido']
+        idProduto = request.json['idProduto']
+        quantidade = request.json['quantidade']
+        valorUnitario = request.json['valorUnitario']
+        valorSoma = request.json['valorSoma']
+    
+        query = conn.execute("insert into produtosPedido values('{0}','{1}','{2}','{3}','{4}')".format(idPedido,idProduto,quantidade,valorUnitario,valorSoma))
+        return {'status':'success'}
+
 class Enderecos_Id(Resource):
     def get(self, id):
 
@@ -103,6 +156,9 @@ api.add_resource(Enderecos_Cep, '/api/enderecos/cep/<cep>') # Route_3
 api.add_resource(Enderecos_Id, '/api/enderecos/id/<id>') # Route_3
 api.add_resource(Enderecos_Logradouro, '/api/enderecos/logradouro/<logradouro>') # Route_3
 api.add_resource(Enderecos, '/api/enderecos') # Route_1
+api.add_resource(Pedidos, '/site/pedidos/')
+api.add_resource(Pedidos_id, '/site/pedidos/id/<id>') # Route_1
+api.add_resource(ProdutosPedido_id, '/site/produtospedido/id/<id>') # Route_1
 api.add_resource(Authenticate_Login, '/api/login/<username>/<password>')
 api.add_resource(Authenticate_Logout, '/api/logout/<username>')
 
