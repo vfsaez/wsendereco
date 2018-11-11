@@ -40,11 +40,26 @@ class Pedidos_id(Resource):
 
 
 class Pedidos(Resource):
-    def get(self,idCliente, nomeCliente, logradouroEntrega, numeroEntrega, complementoEntrega, cepEntrega, valorProdutos, FreteTotal, valorTotal, prazoEntrega, idPagamento, formaPagamento, statusPedido):
+    def post(self):
 
         conn = db_connect.connect()
-
-        query = conn.execute("insert into pedido values(null,'{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{12}','{13}')".format(idCliente,cpfCliente,nomeCliente,logradouroEntrega,numeroEntrega,complementoEntrega,cepEntrega,valorProdutos,FreteTotal,valorTotal,prazoEntrega,idPagamento,formaPagamento, statusPedido))
+        print("auehfauehfaue")
+        print(request.get_json())
+        idCliente = request.get_json()['idCliente']
+        nomeCliente = request.get_json()['nomeCliente']
+        logradouroEntrega = request.get_json()['logradouroEntrega']
+        numeroEntrega = request.get_json()['numeroEntrega']
+        complementoEntrega = request.get_json()['complementoEntrega']
+        cepEntrega = request.get_json()['cepEntrega']
+        valorProdutos = request.get_json()['valorProdutos']
+        FreteTotal = request.get_json()['freteTotal']
+        valorTotal = request.get_json()['valorTotal']
+        prazoEntrega = request.get_json()['prazoEntrega']
+        #idPagamento = request.get_json()['idPagamento']
+        formaPagamento = request.get_json()['formaPagamento']
+        statusPedido = request.get_json()['statusPedido']
+        dataCriacao = request.get_json()['dataCriacao']
+        query = conn.execute("insert into pedido values(null,'{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{12}')".format(idCliente,nomeCliente,logradouroEntrega,numeroEntrega,complementoEntrega,cepEntrega,valorProdutos,FreteTotal,valorTotal,prazoEntrega,formaPagamento,statusPedido,dataCriacao))
         return {'status':'success'}
 
 
@@ -141,7 +156,7 @@ api.add_resource(Enderecos_Id, '/api/enderecos/id/<id>') # Route_3
 api.add_resource(Enderecos_Logradouro, '/api/enderecos/logradouro/<logradouro>') # Route_3
 api.add_resource(Enderecos, '/api/enderecos') # Route_1
 api.add_resource(Pedidos, '/site/pedidos/')
-api.add_resource(Pedidos_id, '/site/pedidos/id/<idCliente>/<nomeCliente>/<logradouroEntrega>/<numeroEntrega>/<complementoEntrega>/<cepEntrega>/<valorProdutos>/<FreteTotal>/<valorTotal>/<prazoEntrega>/<idPagamento>/<formaPagamento>/<statusPedido>')
+api.add_resource(Pedidos_id, '/site/pedidos/id/<id>') # Route_1
 api.add_resource(ProdutosPedido_id, '/site/produtospedido/id/<id>') # Route_1
 api.add_resource(Authenticate_Login, '/api/login/<username>/<password>')
 api.add_resource(Authenticate_Logout, '/api/logout/<username>')
