@@ -79,8 +79,8 @@ class ProdutosPedido(Resource):
         quantidade = request.get_json()['quantidade']
         valorUnitario = request.get_json()['valorUnitario']
         valorSoma = request.get_json()['valorSoma']
-    
-        query = conn.execute("insert into produtosPedido values('{0}','{1}','{2}','{3}','{4}')".format(idPedido,idProduto,quantidade,valorUnitario,valorSoma))
+        statusProduto = request.get_json()['statusProduto']
+        query = conn.execute("insert into produtosPedido values('{0}','{1}','{2}','{3}','{4}','{5}')".format(idPedido,idProduto,quantidade,valorUnitario,valorSoma,statusProduto))
         return {'status':'success'}
 
 class Enderecos_Id(Resource):
