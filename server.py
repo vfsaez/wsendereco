@@ -43,22 +43,22 @@ class Pedidos(Resource):
     def post(self):
 
         conn = db_connect.connect()
-        print(request.json)
-        idCliente = request.json['idCliente']
-        nomeCliente = request.json['nomeCliente']
-        logradouroEntrega = request.json['logradouroEntrega']
-        numeroEntrega = request.json['numeroEntrega']
-        complementoEntrega = request.json['complementoEntrega']
-        cepEntrega = request.json['cepEntrega']
-        valorProdutos = request.json['valorProdutos']
-        FreteTotal = request.json['FreteTotal']
-        valorTotal = request.json['valorTotal']
-        prazoEntrega = request.json['prazoEntrega']
-        idPagamento = request.json['idPagamento']
-        formaPagamento = request.json['formaPagamento']
-        statusPagamento = request.json['statusPagamento']
-        statusEntrega = request.json['statusEntrega']
-        statusPedido = request.json['statusPedido']
+        print(request.get_json())
+        idCliente = request.get_json()['idCliente']
+        nomeCliente = request.get_json()['nomeCliente']
+        logradouroEntrega = request.get_json()['logradouroEntrega']
+        numeroEntrega = request.get_json()['numeroEntrega']
+        complementoEntrega = request.get_json()['complementoEntrega']
+        cepEntrega = request.get_json()['cepEntrega']
+        valorProdutos = request.get_json()['valorProdutos']
+        FreteTotal = request.get_json()['FreteTotal']
+        valorTotal = request.get_json()['valorTotal']
+        prazoEntrega = request.get_json()['prazoEntrega']
+        idPagamento = request.get_json()['idPagamento']
+        formaPagamento = request.get_json()['formaPagamento']
+        statusPagamento = request.get_json()['statusPagamento']
+        statusEntrega = request.get_json()['statusEntrega']
+        statusPedido = request.get_json()['statusPedido']
         query = conn.execute("insert into pedido values(null,'{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{12}','{13}','{14}','{15}')".format(idCliente,cpfCliente,nomeCliente,logradouroEntrega,numeroEntrega,complementoEntrega,cepEntrega,valorProdutos,FreteTotal,valorTotal,prazoEntrega,idPagamento,formaPagamento,statusPagamento,statusEntrega,statusPedido))
         return {'status':'success'}
 
@@ -73,12 +73,12 @@ class ProdutosPedido(Resource):
     def post(self):
 
         conn = db_connect.connect()
-        print(request.json)
-        idPedido = request.json['idPedido']
-        idProduto = request.json['idProduto']
-        quantidade = request.json['quantidade']
-        valorUnitario = request.json['valorUnitario']
-        valorSoma = request.json['valorSoma']
+        print(request.get_json())
+        idPedido = request.get_json()['idPedido']
+        idProduto = request.get_json()['idProduto']
+        quantidade = request.get_json()['quantidade']
+        valorUnitario = request.get_json()['valorUnitario']
+        valorSoma = request.get_json()['valorSoma']
     
         query = conn.execute("insert into produtosPedido values('{0}','{1}','{2}','{3}','{4}')".format(idPedido,idProduto,quantidade,valorUnitario,valorSoma))
         return {'status':'success'}
