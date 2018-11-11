@@ -45,7 +45,6 @@ class Pedidos(Resource):
         conn = db_connect.connect()
         print(request.json)
         idCliente = request.json['idCliente']
-        cpfCliente = request.json['cpfCliente']
         nomeCliente = request.json['nomeCliente']
         logradouroEntrega = request.json['logradouroEntrega']
         numeroEntrega = request.json['numeroEntrega']
